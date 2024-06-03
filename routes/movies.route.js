@@ -2,6 +2,7 @@ import express from "express";
 import {
   movieCreate,
   movieDelete,
+  movieDetails,
   movieUpdate,
   moviesIndex,
 } from "../controllers/movies.controllers.js";
@@ -9,11 +10,14 @@ import {
 const router = express.Router();
 
 // CRUD functionality of movies
-// R - Reading
+// R - Reading all movies list
 router.get("/", moviesIndex);
 
 // C - Create
 router.post("/", movieCreate);
+
+// G - Get Single movie
+router.get("/:id", movieDetails);
 
 // U - Update
 router.put("/:id", movieUpdate);
