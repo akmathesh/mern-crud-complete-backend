@@ -13,16 +13,16 @@ export const moviesIndex = async (req, res) => {
 export const movieCreate = async (req, res) => {
   // validate your data
   const { title, desc } = req.body;
-  const newMovie = new Movie({
-    title,
-    desc,
-  });
-  // Successful or Error
   try {
+    const newMovie = new Movie({
+      title,
+      desc,
+    });
+
     const movie = await newMovie.save();
     return res.status(201).json(movie);
   } catch (error) {
-    return res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 // Get Single Movie
@@ -60,6 +60,15 @@ export const movieUpdate = async (req, res) => {
   }
 };
 
-export const movieDelete = (req, res) => {
-  res.send("Delete a movie");
+export const movieDelete = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const movie = await Movie.findByIdAndDelete(id);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie cannot found" });
+    }
+    res.status(400).json({ messsage: "Movie Deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
